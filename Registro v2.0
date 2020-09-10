@@ -1,0 +1,131 @@
+using System;
+using System.IO;
+using System.Text;
+
+namespace v2_Registro
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            String y, x, z, m, id, name, lastname, age;
+            Int32 n;
+            string[] lines;
+            StringBuilder salida = new StringBuilder();       
+            y = (args[0]);
+
+            if (File.Exists(y) == false)
+            {
+                salida.AppendLine("Cedula,Nombres,Apellidos,Edad");
+                File.AppendAllText(y, salida.ToString());
+            }
+
+            do
+            {
+                n = 0;
+
+                Console.WriteLine("-----------------------------------");
+                Console.WriteLine("[1] Grabar");
+                Console.WriteLine("[2] Listar");
+                Console.WriteLine("[3] Buscar");
+                Console.WriteLine("[4] Salir");
+                Console.WriteLine("-----------------------------------");
+
+                z = Console.ReadLine();
+
+                switch (z)
+                {
+                    case "1":                   
+            
+                        do 
+                        {
+                            Console.Write("Cedula: ");   
+                            id = Console.ReadLine();
+                            Console.Write("Nombres: ");   
+                            name = Console.ReadLine();
+                            Console.Write("Apellidos: ");   
+                            lastname = Console.ReadLine();
+                            Console.Write("Edad: ");   
+                            age = Console.ReadLine();
+
+                            Console.WriteLine("Grabar(G), Reintentar(R), Salir(S)?");
+                            x = Console.ReadLine().ToLower();
+
+                            switch (x)
+                            {
+                                case "g":
+
+                                    salida = new StringBuilder();         
+                                    salida.AppendLine(id + "," + name + "," + lastname + "," + age);
+                                    File.AppendAllText(y, salida.ToString());
+                                break;
+                
+                                case "r":
+                                break;
+                                
+                                case "s": 
+                                break;
+
+                                default: 
+                                    Console.WriteLine("La opción seleccionada no esta disponible"); 
+                                break;               
+                            }
+
+                        }while(x == "r" || (x != "g" && x != "s" && x != "r") || x == "g");
+                        break;
+
+                    case "2": 
+                        Console.ForegroundColor = ConsoleColor.Green;     
+                        Console.WriteLine("*************************************");
+                        Console.ForegroundColor = ConsoleColor.White;           
+                        lines = File.ReadAllLines(y);
+                        foreach(var line in lines)
+                        {
+                            var value = line.Split(',');
+                            Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);
+                        }  
+                        Console.ForegroundColor = ConsoleColor.Green;     
+                        Console.WriteLine("*************************************");
+                        Console.ForegroundColor = ConsoleColor.White;                       
+                    break;
+
+                    case "3":  
+                        Console.Write("Introduzca la cedula del registro que desea buscar: ");
+                        m = Console.ReadLine();
+                        
+                        lines = File.ReadAllLines(y);
+                        foreach(var line in lines)
+                        {
+                            var value = line.Split(',');
+                            if(m == value[0])
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Cedula,Nombres,Apellidos,Edad");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);                                
+                                break;
+                            }
+                            else
+                            {
+                                n++;
+                            }
+                        }
+                        if (n == lines.Length)   
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("El dato ingresado no esta registrado");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }         
+                    break;
+                    case "4":
+                    break;                
+                    default: 
+                        Console.WriteLine("La opción seleccionada no esta disponible");
+                    break;
+                }
+
+            }while(z != "4");
+
+        }
+    }
+}
