@@ -1,0 +1,57 @@
+using System;
+using System.IO;
+using System.Text;
+
+namespace v1_Registro
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            String y, x, id, name, lastname, age;
+            StringBuilder salida = new StringBuilder();       
+            y = (args[0]);
+
+            if (File.Exists(y) == false)
+            {
+                salida.AppendLine("Cedula,Nombres,Apellidos,Edad");
+                File.AppendAllText(y, salida.ToString());
+            }
+            
+            do 
+            {
+                Console.Write("Cedula: ");   
+                id = Console.ReadLine();
+                Console.Write("Nombres: ");   
+                name = Console.ReadLine();
+                Console.Write("Apellidos: ");   
+                lastname = Console.ReadLine();
+                Console.Write("Edad: ");   
+                age = Console.ReadLine();
+
+                Console.WriteLine("Grabar(G), Reintentar(R), Salir(S)?");
+                x = Console.ReadLine().ToLower();
+
+                switch (x)
+                {
+                    case "g":
+
+                        salida = new StringBuilder();         
+                        salida.AppendLine(id + "," + name + "," + lastname + "," + age);
+                        File.AppendAllText(y, salida.ToString());
+                        break;
+                
+                    case "r":
+                        break;
+                    case "s": 
+                        return;
+                    default: 
+                        Console.WriteLine("La opción seleccionada no esta disponible"); 
+                        break;               
+                }
+
+            }while(x == "r" || (x != "g" && x != "s" && x != "r") || x == "g");
+
+        }
+    }
+}
