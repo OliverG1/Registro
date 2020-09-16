@@ -9,7 +9,7 @@ namespace Char_to_char
     {
         static void Main(string[] args)
         {
-            string y, x, z, m, id, name, lastname, age, password, savings;
+            string y, x, z, m, id, name, lastname, age, password, password2, savings;
             TextWriter write;
             Int32 n;
             string[] lines;
@@ -66,8 +66,17 @@ namespace Char_to_char
                             lastname = Program.AllText();
                             Console.Write("Edad: ");
                             age = Program.OnlyNumbers();
-                            Console.Write("Contraseña: ");
-                            password = Program.Password();
+                            do
+                            {       
+                                Console.Write("Contraseña: ");
+                                password = Program.Password();
+                                Console.Write("Confirmar contraseña: ");
+                                password2 = Program.Password();
+                                if (password2 != password)
+                                {
+                                    Console.WriteLine("Las contraseñas no coinciden. Intentelo de nuevo");
+                                }
+                            }while(password2 != password);                        
                             Console.Write("Ahorros: ");
                             savings = Program.DecimalNumbers();
                         
@@ -191,8 +200,17 @@ namespace Char_to_char
                             lastname = Program.AllText();
                             Console.Write("Nueva edad: ");
                             age = Program.OnlyNumbers();
-                            Console.Write("Nueva contraseña: ");
-                            password = Program.Password();
+                            do
+                            {       
+                                Console.Write("Contraseña: ");
+                                password = Program.Password();
+                                Console.Write("Confirmar contraseña: ");
+                                password2 = Program.Password();
+                                if (password2 != password)
+                                {
+                                    Console.WriteLine("Las contraseñas no coinciden. Intentelo de nuevo");
+                                }
+                            }while(password2 != password);
                             Console.Write("Nuevos ahorros: ");
                             savings = Program.DecimalNumbers();
 
