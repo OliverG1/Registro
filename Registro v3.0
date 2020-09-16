@@ -1,0 +1,283 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Linq;
+
+namespace v2_Registro
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string y, x, z, m, id, name, lastname, age;
+            TextWriter write;
+            Int32 n;
+            string[] lines;
+            StringBuilder output = new StringBuilder();
+
+            y = args[0];
+            
+            if (!File.Exists(y))
+            {
+                output.AppendLine("Cedula,Nombres,Apellidos,Edad");
+                File.AppendAllText(y, output.ToString());
+            }
+
+            do
+            {
+                n = 0;
+
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("[1] Grabar");
+                Console.WriteLine("[2] Listar");
+                Console.WriteLine("[3] Buscar");
+                Console.WriteLine("[4] Editar");
+                Console.WriteLine("[5] Eliminar");
+                Console.WriteLine("[6] Salir");
+                Console.WriteLine("-------------------------------------");
+
+                z = Console.ReadLine();
+
+                switch(z)
+                {
+                    case "1":
+                        do
+                        {
+                        Menu:
+                            Console.Write("Cedula: ");
+                            id = Console.ReadLine();
+
+                            lines = File.ReadAllLines(y);
+                            foreach(var line in lines)
+                            {
+                                var value = line.Split(',');
+                                if (id == value[0])
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("La cedula introducida está en uso");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    goto Menu;
+                                }
+                            }
+                        
+                            Console.Write("Nombres: ");
+                            name = Console.ReadLine();
+                            Console.Write("Apellidos: ");
+                            lastname = Console.ReadLine();
+                            Console.Write("Edad: ");
+                            age = Console.ReadLine();
+
+                            Console.WriteLine("Grabar(G), Reintentar(R), Salir(S)?");
+                            x = Console.ReadLine().ToLower();
+
+                            switch (x)
+                            {
+                                case "g":
+                                    output = new StringBuilder();
+                                    output.AppendLine(id + "," + name + "," + lastname + "," + age);
+                                    File.AppendAllText(y, output.ToString());                                    
+                                break;
+
+                                case "r":
+                                break;
+
+                                case "s": 
+                                break;  
+
+                                default: 
+                                    Console.WriteLine("La opción seleccionada no esta disponible");
+                                break;
+                            }  
+
+                        } while (x == "r" || (x != "g" && x != "r" && x!= "s") || x == "g"); 
+                    break;
+
+                    case "2":
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("********************************************");
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        lines = File.ReadAllLines(y);
+                        
+                        foreach (var line in lines)
+                        {
+                            var value = line.Split(',');
+                            Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);                        
+                        }
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("********************************************");
+                        Console.ForegroundColor = ConsoleColor.White;                        
+                    break;
+                    case "3":
+                        Console.Write("Introduzca la cedula del registro que desea buscar: ");
+                        m = Console.ReadLine();
+
+                        lines = File.ReadAllLines(y);
+                        foreach(var line in lines)
+                        {
+                            var value = line.Split(',');
+                            if (m == value[0])
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Cedula,Nombres,Apellidos,Edad");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);
+                                break;
+                            }
+                            else
+                            {
+                                n++;
+                            }
+                        }
+                        if (n == lines.Length)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("El dato ingresado no esta registrado");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    break;
+
+                    case "4":
+
+                        Console.Write("Introduzca la cedula del registro que desea modificar: ");
+                        m = Console.ReadLine();
+
+                        lines = File.ReadAllLines(y);
+                        foreach(var line in lines)
+                        {
+                            var value = line.Split(',');
+                            if (m == value[0])
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Cedula,Nombres,Apellidos,Edad");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);
+                                break;
+                            }
+                            n++;                        
+                        }
+                        if (n == lines.Length)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("El dato ingresado no esta registrado");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                        Menu2:
+                            Console.Write("Nueva cedula: ");
+                            id = Console.ReadLine();
+                            lines = File.ReadAllLines(y);
+                            foreach(var line in lines)
+                            {
+                                var value = line.Split(',');
+                                if (id == value[0] && id != m)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("La cedula introducida está en uso");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                    goto Menu2;
+                                }
+                            }
+                            Console.Write("Nuevos nombres: ");
+                            name = Console.ReadLine();
+                            Console.Write("Nuevos apellidos: ");
+                            lastname = Console.ReadLine();
+                            Console.Write("Nueva edad: ");
+                            age = Console.ReadLine();
+
+                            lines[n] = (id + "," + name + "," + lastname + "," + age);
+
+                            write = new StreamWriter(y);
+                            write.Close();
+
+                            write = new StreamWriter(y);
+
+                            foreach (var line in lines)
+                            {  
+                                write.WriteLine(line);                 
+                            } 
+
+                            write.Close();
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("El registro se modificó correctamente");
+                            Console.ForegroundColor = ConsoleColor.White;                       
+                        }
+                    break;
+
+                    case "5":
+                        Console.Write("Introduzca la cedula del registro que desea eliminar: ");
+                        m = Console.ReadLine();
+
+                        lines = File.ReadAllLines(y);
+                        foreach(var line in lines)
+                        {
+                            var value = line.Split(',');
+                            if (m == value[0])
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Cedula,Nombres,Apellidos,Edad");
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.WriteLine(value[0] + "," + value[1] + "," + value[2] + "," + value[3]);
+                                break;
+                            }
+                            n++;                        
+                        }
+                        if (n == lines.Length)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("El dato ingresado no esta registrado");
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                            Console.Write("Confirmar eliminación[S/N]");
+                            string c = Console.ReadLine().ToLower();
+
+                            switch(c)
+                            {
+                                case "s":
+                                    lines = lines.Except(new string[] {lines[n]}).ToArray();
+
+                                    write = new StreamWriter(y);
+                                    write.Close();
+
+                                    write = new StreamWriter(y);
+
+                                    foreach (var line in lines)
+                                    {  
+                                        write.WriteLine(line);                 
+                                    } 
+
+                                    write.Close();
+
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine("El registro se eliminó correctamente");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                break;
+
+                                case "n":
+                                break;
+
+                                default:
+                                    Console.WriteLine("La opción seleccionada no esta disponible");
+                                break;
+                            }
+
+                        }
+                    break;
+
+                    case "6":
+                    break;
+
+                    default:
+                        Console.WriteLine("La opción seleccionada no esta disponible");
+                    break;
+                }
+                
+            } while (z != "6");
+        }
+    }
+}
