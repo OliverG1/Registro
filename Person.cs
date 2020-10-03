@@ -1,0 +1,76 @@
+using System;
+
+namespace ClassPerson
+{
+    public sealed class Person
+    {
+        private int information = 0;
+        public string id { get; } 
+        public string name { get; }
+        public string lastname { get; }
+        public string password { get; }
+        public string savings { get; }  
+
+        public int age => information >> 4;
+        public Gender gender => (Gender) (information & 8);
+        public MS maritalStatus => (MS) (information & 4);
+        public Grade grade => (Grade) (information & 3);
+
+        internal static Person FromLine(in string line)
+        {
+            string[] value = line.Split(',');
+            string id = value[0];
+            string name = value[1];
+            string lastname = value[2];
+            string password = value[3];
+            string savings = value[4];
+            int information = Convert.ToInt32(value[5]);
+
+            Gender gender = (Gender) (information & 8);
+            MS maritalStatus = (MS) (information & 4);
+            Grade grade = (Grade) (information & 3);
+            int age = information >> 4;
+
+            return new Person(id, name, lastname, password, savings, age, gender, maritalStatus, grade);
+        }
+
+        public Person(in string Id, in string Name, in string Lastname, in string Password, in string Savings, in int age, in Gender gender, in MS maritalStatus, in Grade grade)
+        {
+            id = Id;
+            name = Name;
+            lastname = Lastname;
+            password = Password;
+            savings = Savings;     
+            information = (age << 4) | (int)gender | (int)maritalStatus | (int)grade;       
+        }
+
+        public override string ToString()
+        {            
+            return $"{id},{name},{lastname},{password},{savings},{age},{gender},{maritalStatus},{grade}";
+        }
+        public static string Return(Person p)
+        {
+            return $"{p.id},{p.name},{p.lastname},{p.password},{p.savings},{p.information}";          
+        }
+
+    }
+    public enum Gender
+    {
+        Masculino = 0,
+        Femenino = 8
+    }
+
+    public enum MS 
+    {
+        Soltero = 0,
+        Casado = 4
+    }
+
+    public enum Grade
+    {
+        Inicial = 0,
+        Bachillerato = 1,
+        Grado = 2,
+        Postgrado = 3
+    }
+}
